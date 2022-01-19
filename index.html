@@ -3,17 +3,32 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-19 21:24:44
+ * @LastEditTime: 2022-01-19 22:16:51
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hello,vue and rollup</title>
 </head>
+
 <body>
     hello
+    <div id="app"></div>
+    <script src="dist/umd/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    aaa: 111,
+                }
+            },
+        })
+    </script>
 </body>
+
 </html>
