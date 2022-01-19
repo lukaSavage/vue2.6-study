@@ -1,0 +1,5 @@
+{
+    "presets": [
+        "@babel/preset-env"/* 告诉babel编译的时候具体使用哪个插件 */
+    ]
+}
