@@ -3,10 +3,10 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 22:33:20
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-19 23:06:23
+ * @LastEditTime: 2022-01-20 09:41:44
  */
 
-import { observe } from './observe';
+import { observe } from './observe/index';
 
 export function initState(vm) {
 	const opts = vm.$options;
@@ -31,8 +31,8 @@ export function initState(vm) {
 function initProps() {}
 function initMethods() {}
 function initData(vm) {
-	const data = vm.$options.data;
-	typeof data === 'function' ? data.call(vm) : data;
+	let data = vm.$options.data;
+	data = typeof data === 'function' ? data.call(vm) : data;
 	// tag: 拿到data后，进行数据的劫持
 	observe(data);
 }

@@ -3,16 +3,15 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:04:45
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-19 22:35:18
+ * @LastEditTime: 2022-01-20 09:35:18
  */
 
 import { initMixin } from './init';
 
 function Vue(options) {
-	// console.log(options, this);
-    
+  // console.log(options, this);
+  this._init(options);
 }
-
 initMixin(Vue);
 
 export default Vue;
