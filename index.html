@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-20 09:50:04
+ * @LastEditTime: 2022-01-20 21:10:34
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -20,14 +20,16 @@
     <div id="app"></div>
     <script src="dist/umd/vue.js"></script>
     <script>
-        new Vue({
+        const vm = new Vue({
             el: '#app',
             data() {
                 return {
-                    aaa: 111
+                    a: { b: { c: { finally: true } } }
                 }
             },
         })
+        // vm._data.a = 1
+        console.log(vm._data);
     </script>
 </body>
 

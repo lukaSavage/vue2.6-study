@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 22:33:20
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-20 09:41:44
+ * @LastEditTime: 2022-01-20 20:57:01
  */
 
 import { observe } from './observe/index';
@@ -32,7 +32,7 @@ function initProps() {}
 function initMethods() {}
 function initData(vm) {
 	let data = vm.$options.data;
-	data = typeof data === 'function' ? data.call(vm) : data;
+	vm._data = data = typeof data === 'function' ? data.call(vm) : data;
 	// tag: 拿到data后，进行数据的劫持
 	observe(data);
 }
