@@ -3,9 +3,10 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 23:03:22
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-20 23:02:28
+ * @LastEditTime: 2022-01-23 11:26:55
  */
 
+import { myDefineProperty } from '../utils';
 import { arrayMethods } from './array';
 
 class Observe {
@@ -13,13 +14,14 @@ class Observe {
 		console.log(data);
 
 		// 在data上添加一个属性__ob__,用于挂载observeArray方法给arrays.js文件使用
-        /* done: 为什么要使用Object.defineProperty而不是直接 data.__ob__ = this */
-        /* done: 答：如果直接赋值的话，因为__ob__会在循环中遍历出来，会造成死循环 */
-		Object.defineProperty(data, '__ob__', {
-			enumerable: false,   // 表示不能枚举，不能在循环当中展示出来
-			configurable: false, 
-			value: this,
-		});
+		/* done: 为什么要使用Object.defineProperty而不是直接 data.__ob__ = this */
+		/* done: 答：如果直接赋值的话，因为__ob__会在循环中遍历出来，会造成死循环 */
+		// Object.defineProperty(data, '__ob__', {
+		// 	enumerable: false,   // 表示不能枚举，不能在循环当中展示出来
+		// 	configurable: false,
+		// 	value: this,
+		// });
+		myDefineProperty(data, '__ob__', this);
 		// 使用defineProperty重新定义属性
 		if (!Array.isArray(data)) {
 			this.walk(data);
@@ -75,6 +77,6 @@ export function observe(data) {
 	);
 	// 先判断是不是对象,如果不是对象，不观察
 	if (typeof data !== 'object' || data !== null) return;
-    if(data.__ob__) return;
+	if (data.__ob__) return;
 	return new Observe(data);
 }

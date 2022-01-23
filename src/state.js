@@ -3,10 +3,11 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 22:33:20
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-20 20:57:01
+ * @LastEditTime: 2022-01-23 10:57:20
  */
 
-import { observe } from './observe/index';
+import { observe } from './observe';
+import { myProxy } from './utils';
 
 export function initState(vm) {
 	const opts = vm.$options;
@@ -33,8 +34,15 @@ function initMethods() {}
 function initData(vm) {
 	let data = vm.$options.data;
 	vm._data = data = typeof data === 'function' ? data.call(vm) : data;
-	// tag: 拿到data后，进行数据的劫持
+	// tag: 1、拿到data后，进行数据的劫持
+
+	// note: 实现属性代理：vm._data.xxx = vm.xxx
+	for (const key in data) {
+		myProxy(vm, '_data', key);
+	}
 	observe(data);
 }
 function initComputed() {}
 function initWatch() {}
+
+

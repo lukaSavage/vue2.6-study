@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-      "start": "rollup -c -w"
+    "start": "rollup -c -w"
   },
   "repository": "https://gitee.com/lukasavage/vue-demo.git",
   "author": "lukaSavage <tu14181@qq.com>",
@@ -12,7 +12,8 @@
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.8",
     "rollup": "^2.64.0",
-    "rollup-plugin-babel": "^4.4.0"
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0"
   },
   "devDependencies": {
     "rollup-plugin-serve": "^1.1.0"

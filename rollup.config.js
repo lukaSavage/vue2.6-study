@@ -3,10 +3,11 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:02:58
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-19 21:18:03
+ * @LastEditTime: 2022-01-23 10:56:11
  */
 import serve from 'rollup-plugin-serve';
 import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
 
 export default {
 	input: './src/index.js',
@@ -16,16 +17,17 @@ export default {
 		file: 'dist/umd/vue.js', // 打包输出后的文件名
 		sourcemap: true, // 开启调试
 	},
-    plugins: [
-        babel({      // 告诉rollup用babel来转译
-            exclude: 'node_modules/**', // node_modules下的所有文件都不需要转译
-            
-        }),
-        serve({
-            open: true,   // 自动打开浏览器
-            port: 3001,   // 默认端口号
-            contentBase: '',   // 表示路径以当前目录为标准
-            openPage: '/index.html',    // 默认打开的页面
-        })
-    ]
+	plugins: [
+		babel({
+			// 告诉rollup用babel来转译
+			exclude: 'node_modules/**', // node_modules下的所有文件都不需要转译
+		}),
+		serve({
+			open: true, // 自动打开浏览器
+			port: 3001, // 默认端口号
+			contentBase: '', // 表示路径以当前目录为标准
+			openPage: '/index.html', // 默认打开的页面
+		}),
+		commonjs(), // 引入文件的时候自动查找文件下的index文件
+	],
 };
