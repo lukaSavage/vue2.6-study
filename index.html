@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-23 10:43:07
+ * @LastEditTime: 2022-01-23 16:32:05
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -17,19 +17,25 @@
 
 <body>
     hello
-    <div id="app"></div>
+    <div id="app">
+        我是文本
+        <div id="my">
+            hello,
+            <span>{{ str }}</span>
+        </div>
+    </div>
     <script src="dist/umd/vue.js"></script>
     <script>
         const vm = new Vue({
-            el: '#app',
+            // el: '#app',
             data() {
                 return {
-                    a: ['张三', '李四', '王五']
+                    str: 'world'
                 }
             },
         })
+        vm.$mount('#app')
         // vm._data.a = 1
-        console.log(vm.a);
     </script>
 </body>
 
