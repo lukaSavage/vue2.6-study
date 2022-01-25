@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-25 21:56:40
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 22:21:55
+ * @LastEditTime: 2022-01-25 23:29:34
  */
 
 export function patch(oldVnode, vnode) {
@@ -20,6 +20,10 @@ function createEl(vnode) {
 	const { tag, children, key, data, text } = vnode;
 	if (typeof tag === 'string') {
 		vnode.el = document.createElement(tag); // 创建元素
+
+		// todo: style样式的处理
+		updateProperties(vnode);
+
 		children.forEach(child => {
 			// 遍历儿子，将儿子渲染后的结果扔到父亲中
 			vnode.el.appendChild(createEl(child));
@@ -29,4 +33,22 @@ function createEl(vnode) {
 		vnode.el = document.createTextNode(text);
 	}
 	return vnode.el;
+}
+
+function updateProperties(vnode) {
+	const el = vnode.el;
+	const newProps = vnode.data || {};
+    console.log(newProps);
+	for (const key in newProps) {
+		// 这里我们只对class和style做处理
+		if (key === 'style') {
+			for (const styleName in newProps.style) {
+				el.style[styleName] = newProps.style[styleName];
+			}
+		} else if (key === 'class') {
+			el.className = el.class;
+		} else {
+			el.setAttribute(key, newProps[key]);
+		}
+	}
 }
