@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:48:36
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 09:19:54
+ * @LastEditTime: 2022-01-25 22:00:10
  */
 
 import { compileToFunctions } from './compiler';
@@ -24,6 +24,7 @@ export function initMixin(Vue) {
     const vm = this;
     const options = vm.$options;
     el = document.querySelector('#app');
+    vm.$el = el;
     // 优先级判断 render > template > el
     if (!options.render) {
       // 没render方法，将template转换成render方法
