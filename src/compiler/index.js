@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 13:29:14
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 00:14:38
+ * @LastEditTime: 2022-01-25 09:15:35
  */
 
 import { generate } from './generate';

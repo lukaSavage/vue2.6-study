@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-24 20:40:17
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 00:14:52
+ * @LastEditTime: 2022-01-25 09:41:06
  */
 
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // 匹配双花括号语法 {{ xxx }}
@@ -24,7 +24,6 @@ export function generate(ast) {
 			return generate(node);
 		} else {
 			let txt = node.text;
-            console.log(txt);
 			if (!defaultTagRE.test(txt)) {
 				// 如果是普通文本(不带双花括号)
 				return `_v(${JSON.stringify(txt)})`;
@@ -45,7 +44,6 @@ export function generate(ast) {
 			if (lastIndex < txt.length) {
 				tokens.push(JSON.stringify(txt.slice(lastIndex)));
 			}
-            console.log(tokens);
 			return `_v(${tokens.join('+')})`;
 		}
 	}
@@ -59,11 +57,10 @@ export function generate(ast) {
 
 	let children = genChildren(ast);
 	let renderChild = children ? `,${children}` : '';
-	let code = `_c(${ast.tag},${
+	let code = `_c('${ast.tag}',${
 		ast.attrs.length ? String(genProps(ast.attrs)) : 'undefined'
 	}${renderChild})`;
 
-	console.log(code);
 	return code;
 }
 
@@ -71,7 +68,6 @@ function genProps(attrs) {
 	let str = '';
 	for (let i = 0; i < attrs.length; i++) {
 		const values = attrs[i];
-        console.log(values);
 		if (values.name === 'style') {
 			let obj = {}; // 对样式做处理
 			values.value.split(';').forEach(item => {
