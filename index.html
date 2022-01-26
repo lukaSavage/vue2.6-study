@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 23:29:55
+ * @LastEditTime: 2022-01-26 22:35:25
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -26,12 +26,27 @@
     </div>
     <script src="dist/umd/vue.js"></script>
     <script>
+        // 混合、混入
+        Vue.mixin({
+            created() {
+                console.log('mixin中的created');
+            }
+        })
+        Vue.mixin({
+            created() {
+                console.log('mixin2中的created');
+            }
+        })
+
         const vm = new Vue({
             // el: '#app',
             data() {
                 return {
                     str: 'world'
                 }
+            },
+            created() {
+                console.log('vm中的created');
             },
         })
         vm.$mount('#app')

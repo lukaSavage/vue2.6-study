@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 23:03:22
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-23 11:26:55
+ * @LastEditTime: 2022-01-26 21:34:42
  */
 
 import { myDefineProperty } from '../utils';
@@ -71,10 +71,6 @@ function defineReactive(data, key, value) {
  * @param {object} data 用户传递过来的属性
  */
 export function observe(data) {
-	console.log(
-		'当前data类型',
-		Object.prototype.toString.call(data).slice(8, -1)
-	);
 	// 先判断是不是对象,如果不是对象，不观察
 	if (typeof data !== 'object' || data !== null) return;
 	if (data.__ob__) return;

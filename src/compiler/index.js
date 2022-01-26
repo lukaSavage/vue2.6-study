@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 13:29:14
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 21:46:17
+ * @LastEditTime: 2022-01-26 21:33:42
  */
 
 import { generate } from './generate';
@@ -23,7 +23,6 @@ export function compileToFunctions(template) {
 
 	// 4.通过树生成代码
 	const code = generate(ast);
-	console.log(code);
 	let render = new Function(`with(this){return ${code}}`);
 	return render;
 }

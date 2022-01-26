@@ -4,7 +4,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-24 20:33:57
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 00:12:36
+ * @LastEditTime: 2022-01-26 21:34:14
  */
 
 // todo: 这里我们以 <div id="my">hello,<span>{{ str }}</span></div> 为例来解析
@@ -132,7 +132,6 @@ export function parseHTML(html) {
 			parent: null, // 父元素
 		};
 	}
-	console.log(root);
 	return root;
 }
 

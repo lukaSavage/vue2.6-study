@@ -3,12 +3,11 @@
  * @Author: lukasavage
  * @Date: 2022-01-25 21:56:40
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 23:29:34
+ * @LastEditTime: 2022-01-26 21:33:19
  */
 
 export function patch(oldVnode, vnode) {
 	// 将虚拟节点转换成真实节点
-	console.log(vnode);
 	const el = createEl(vnode); // 产生真实dom
 	let parentElm = oldVnode.parentNode; // 获取老的app的父亲 ==> body元素
 
@@ -38,7 +37,6 @@ function createEl(vnode) {
 function updateProperties(vnode) {
 	const el = vnode.el;
 	const newProps = vnode.data || {};
-    console.log(newProps);
 	for (const key in newProps) {
 		// 这里我们只对class和style做处理
 		if (key === 'style') {
