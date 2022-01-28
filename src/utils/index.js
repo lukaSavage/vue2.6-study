@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 10:51:12
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-26 22:55:21
+ * @LastEditTime: 2022-01-28 16:41:18
  */
 
 /**
@@ -67,7 +67,7 @@ LIFECYCLE_HOOKS.forEach(item => {
 // 混入函数
 export function mergeOptions(parent, child) {
 	// 遍历父亲，可能是父亲有 儿子没有
-    console.log(parent, child.created());
+    // console.log(parent, child.created());
 	const options = {};
 	// 儿子有，父亲没有
 	for (const key in parent) {

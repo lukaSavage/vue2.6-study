@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-28 14:29:58
+ * @LastEditTime: 2022-01-28 16:46:20
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -29,12 +29,12 @@
         // 混合、混入
         Vue.mixin({
             created() {
-                console.log('mixin中的created');
+                // console.log('mixin中的created');
             }
         })
         Vue.mixin({
             created() {
-                console.log('mixin2中的created');
+                // console.log('mixin2中的created');
             }
         })
 
@@ -46,15 +46,15 @@
                 }
             },
             created() {
-                console.log('vm中的created');
+                // console.log('vm中的created');
             },
         })
         vm.$mount('#app')
         // vm._data.a = 1
         setTimeout(() => {
             vm.str = 'fuck you!!!'
-            vm._update(vm._render());
-        }, 2000);
+            // vm._update(vm._render());
+        }, 1000);
     </script>
 </body>
 
