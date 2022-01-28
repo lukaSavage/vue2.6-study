@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-25 21:56:40
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-26 21:33:19
+ * @LastEditTime: 2022-01-28 14:43:17
  */
 
 export function patch(oldVnode, vnode) {
@@ -13,6 +13,7 @@ export function patch(oldVnode, vnode) {
 
 	parentElm.insertBefore(el, oldVnode.nextSibling);
 	parentElm.removeChild(oldVnode); // 删除老的
+	return el;
 }
 
 function createEl(vnode) {
