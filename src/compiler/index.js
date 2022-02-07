@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 13:29:14
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-26 21:33:42
+ * @LastEditTime: 2022-02-02 15:12:50
  */
 
 import { generate } from './generate';
@@ -20,7 +20,6 @@ export function compileToFunctions(template) {
     */
 	const ast = parseHTML(template);
 	// todo: 优化静态节点
-
 	// 4.通过树生成代码
 	const code = generate(ast);
 	let render = new Function(`with(this){return ${code}}`);

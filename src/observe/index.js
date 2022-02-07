@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 23:03:22
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-28 16:59:51
+ * @LastEditTime: 2022-02-02 14:24:28
  */
 
 import { myDefineProperty } from '../utils';
@@ -13,12 +13,11 @@ import Dep from './dep';
 class Observe {
     constructor(data) {
         console.log(data);
-
         // 在data上添加一个属性__ob__,用于挂载observeArray方法给arrays.js文件使用
         /* done: 为什么要使用Object.defineProperty而不是直接 data.__ob__ = this */
         /* done: 答：如果直接赋值的话，因为__ob__会在循环中遍历出来，会造成死循环 */
         // Object.defineProperty(data, '__ob__', {
-        // 	enumerable: false,   // 表示不能枚举，不能在循环当中展示出来
+        // 	enumerable: false,   // 表示不能枚举，不能在后续watch循环当中展示出来
         // 	configurable: false,
         // 	value: this,
         // });

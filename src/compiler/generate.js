@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-24 20:40:17
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-25 09:41:06
+ * @LastEditTime: 2022-02-02 15:04:16
  */
 
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // 匹配双花括号语法 {{ xxx }}
@@ -60,7 +60,7 @@ export function generate(ast) {
 	let code = `_c('${ast.tag}',${
 		ast.attrs.length ? String(genProps(ast.attrs)) : 'undefined'
 	}${renderChild})`;
-
+    console.log(code);
 	return code;
 }
 
