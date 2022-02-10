@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 23:03:22
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-02 14:24:28
+ * @LastEditTime: 2022-02-10 20:35:27
  */
 
 import { myDefineProperty } from '../utils';
@@ -50,7 +50,8 @@ class Observe {
 
 function defineReactive(data, key, value) {
     // 递归遍历添加get、set方法
-    observe(value);
+    // 获取数组对应的dep
+    const childDep = observe(value);
 
     let dep = new Dep(); // 每个属性都有一个dep
     Object.defineProperty(data, key, {
@@ -59,6 +60,10 @@ function defineReactive(data, key, value) {
             if (Dep.target) {
                 // 让这个属性记住
                 dep.depend();
+                if(childDep) {
+                    // 默认给数组增加了一个dep属性，当对这个数组对象取值的时候，
+                    childDep.dep.depend();    // 数组存起来这个渲染watcher
+                }
             }
             return value;
         },

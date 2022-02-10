@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-20 21:48:07
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-20 22:57:26
+ * @LastEditTime: 2022-02-10 20:41:13
  */
 
 /* note: 1、拿到数组原型里面的方法 */
@@ -33,6 +33,7 @@ methods.forEach(item => {
 
 		// note: 3、做完我们自己的逻辑后，还要调用原来oldArrayMethods上的原生方法
 		const res = oldArrayMethods[item].apply(this, args);
+		ob.dep.notify();  // 通知数组更新
 		return res;
 	};
 });
