@@ -3,11 +3,11 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 22:33:20
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-28 17:00:24
+ * @LastEditTime: 2022-02-10 22:45:35
  */
 
 import { observe } from './observe';
-import { myProxy } from './utils';
+import { myProxy, nextTick } from './utils';
 
 export function initState(vm) {
 	const opts = vm.$options;
@@ -44,5 +44,11 @@ function initData(vm) {
 }
 function initComputed() {}
 function initWatch() {}
+
+export function stateMixin(Vue) {
+    Vue.prototype.$nextTick = function(cb) {
+        nextTick(cb)
+    }
+}
 
 

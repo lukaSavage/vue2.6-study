@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 10:51:12
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-28 16:41:18
+ * @LastEditTime: 2022-02-10 23:13:23
  */
 
 /**
@@ -44,7 +44,7 @@ export const LIFECYCLE_HOOKS = [
 
 const strats = {};
 strats.data = function (parentVal, childVal) {
-    return childVal; 
+	return childVal;
 };
 strats.computed = function () {};
 strats.watch = function () {};
@@ -67,7 +67,7 @@ LIFECYCLE_HOOKS.forEach(item => {
 // 混入函数
 export function mergeOptions(parent, child) {
 	// 遍历父亲，可能是父亲有 儿子没有
-    // console.log(parent, child.created());
+	// console.log(parent, child.created());
 	const options = {};
 	// 儿子有，父亲没有
 	for (const key in parent) {
@@ -90,4 +90,40 @@ export function mergeOptions(parent, child) {
 	}
 
 	return options;
+}
+
+let callbacks = [];
+let pending = false;
+
+function flushCallbacks() {
+	callbacks.forEach(cb => cb());
+	pending = false;
+}
+
+let timeFunc;
+if (Promise) {
+	timeFunc = Promise.resolve().then(flushCallbacks);
+} else if (MutationObserver) {
+	// MutationObserver可以监控dom变化，是异步更新
+	let observe = new MutationObserver(flushCallbacks);
+	let textNode = document.createTextNode(1);
+	observe.observe(textNode, { characterData: true });
+	timeFunc = () => {
+		textNode.textContent = 2;
+	};
+} else if (setImmediate) {
+	timeFunc = setImmediate(flushCallbacks);
+} else {
+	timeFunc = () => {
+		setTimeout(flushCallbacks);
+	};
+}
+
+export function nextTick(cb) {
+	// 因为内部会调用nextTick,用户也会调用，但是异步只需要一次
+	callbacks.push(cb);
+	if (!pending) {
+		timeFunc(); // 这个方法是异步方法，做了兼容的。Vue3中直接使用了Promise.resolve().then()方法
+        pending = true;
+	}
 }

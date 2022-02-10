@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-01-28 16:46:20
+ * @LastEditTime: 2022-02-10 22:52:39
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -51,10 +51,14 @@
         })
         vm.$mount('#app')
         // vm._data.a = 1
-        setTimeout(() => {
-            vm.str = 'fuck you!!!'
-            // vm._update(vm._render());
-        }, 1000);
+        vm.str = 'fuck you!!!'
+        // setTimeout(() => {
+        //     vm.str = 'fuck you!!!'
+        //     // vm._update(vm._render());
+        // }, 1000);
+        vm.$nextTick(()=>{
+            console.log(1111);
+        })
     </script>
 </body>
 
