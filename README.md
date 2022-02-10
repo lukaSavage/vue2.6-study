@@ -330,5 +330,142 @@
 
 ## 八、混入原理
 
-​		
+
+
+
+
+## 九、属性依赖更新
+
+- 整体流程解读
+
+  1. 在挂载组件的时候(调用vm._render())，通常在mountComponent函数中有一个class类，这个是渲染watcher
+  2. 在渲染之前我们把watcher实例放到Dep.target上
+  3. 每一个组件的每一个data中的属性都有添加一个Dep类，当我们进行object.defineProperty属性取值的时候(注意此时Dep.target上的watcher还没有清除),，会把当前watcher实例给存起来，取值的时候再forEach调用
+  4. 注意页面上所需要的属性都会将这个watcher存在自己的dep中
+  5. <font color="red">**属性更新的时候，watcher类中有一个update方法(即调用vm._update(vm._render()))，这是重新渲染组件的关键**</font>
+  6. 渲染完成之后把Dep.target中的watcher实例删除(因为已经没用了，每个属性的watcher都存储在一个数组中了~)
+
+- 具体源码解读
+
+  1. lifecycle.js
+
+     ```js
+     export function mountComponent(vm, el) {
+         // 调用render方法后挂载到el属性上
+         vm.$el = el;
+         // _update方法负责将虚拟dom变成真实dom,_render方法将ast语法树转变成render方法
+         callHook(vm, 'beforeCreate');
+     
+         // note: 将更新的方法封装成函数传递给Watcher
+         const updateComponentFunc = () => {
+             vm._update(vm._render());
+         };
+         
+     	/* ★★★★★★★★★★ 核心步骤 ★★★★★★★★★★★★★★★★★ */
+         const watcher = new Watcher(vm, updateComponentFunc, () => {
+     		callHook(vm, 'beforeUpdate')
+     	}, true);  // 注意：最后的true代表渲染watcher,只是一个名字
+         /* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
+     
+     	// 要把属性和watcher绑定在一起
+     
+         callHook(vm, 'mounted');
+     }
+     ```
+
+     
+
+  2. src/observe/watcher.js
+
+     ```js
+     import { popTarget, pushTarget } from './dep';
+     
+     
+     let id = 0;
+     class Watcher {
+         constructor(vm, exprOrFn, cb, options) {
+             this.vm = vm;
+             this.exprOrFn = exprOrFn;
+             this.cb = cb;
+             this.options = options;
+             this.id = id++; // watcher的唯一标识
+     
+             if (typeof exprOrFn === 'function') {
+                 this.getters = exprOrFn;
+             }
+             this.get(); // 默认会调用get方法
+         }
+     
+         get() {
+             pushTarget(this);
+             this.getters();
+             popTarget();
+         }
+         update() {
+             this.get();
+         }
+     }
+     
+     export default Watcher;
+     ```
+
+  3. src/observe/dep.js
+
+     ```js
+     class Dep {
+         subs = [];
+         depend() {
+             this.subs.push(Dep.target);
+         }
+         notify() {
+             this.subs.forEach(watcher=>watcher.update())
+         }
+     }
+     
+     // 多对多得关系
+     // 一个属性 -> 一个dep -> 一个或者多个watcher
+     // 一个可以watcher -> 多个dep
+     Dep.target = null;
+     export function pushTarget(watcher) {
+         Dep.target = watcher;
+     }
+     export function popTarget() {
+         Dep.target = null;
+     }
+     
+     export default Dep;
+     ```
+
+  4. src/observe/index.js
+
+     ```js
+     function defineReactive(data, key, value) {
+         // 递归遍历添加get、set方法
+         observe(value);
+     
+         let dep = new Dep(); // 每个属性都有一个dep
+         Object.defineProperty(data, key, {
+             get() {
+                 console.log('用户获取值了！', value);
+                 if (Dep.target) {
+                     // 让这个属性记住
+                     dep.depend();
+                 }
+                 return value;
+             },
+             set(newVal) {
+                 console.log('用户改值了~', newVal);
+                 // 在赋值的时候可能会给响应式数据赋值一个新对象，这个时候也要递归添加get、set方法
+                 observe(newVal);
+                 if (value === newVal) return;
+                 value = newVal;
+                 dep.notify();
+             },
+         });
+     }
+     ```
+
+## 十、
+
+
 
