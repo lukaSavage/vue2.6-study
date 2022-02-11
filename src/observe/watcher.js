@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-28 14:53:48
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-10 22:34:59
+ * @LastEditTime: 2022-02-11 09:39:14
  * @FilePath: \vue-demo\src\observe\watcher.js
  */
 import { nextTick } from '../utils';
@@ -68,7 +68,6 @@ function queueWatcher(watcher) {
 	const id = watcher.id;
 	if (has[id] == null) {
 		queue.push(watcher);
-		console.log(queue[0].run);
 		has[id] = true;
 
 		// 等待所有代码执行完后执行
