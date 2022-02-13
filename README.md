@@ -465,7 +465,158 @@
      }
      ```
 
-## 十、
+## 十、nextTick实现原理
 
+- 首先我们需要实现vue的批量更新
 
+  在vue里面，如果需要更新视图，则必须通过vm._update方法进行更新，因此，我们可以对watcher类进行改造。如下
 
+  ```js
+  // src/observe/watcher
+  
+  class Watcher {
+      // ...
+      
+      update() {
+  		// 这里不要每次调用get方法，get方法会重新渲染页面
+  		queueWatcher(this);
+  
+  		// this.get(); // todo: 这种写法是直接更新的方法，后续我们需要把它变成批量更新的方法
+  	}
+  
+  	run() {
+  		this.get(); // 渲染逻辑
+  	}
+  }
+  
+  function queueWatcher(watcher) {
+  	const id = watcher.id;
+  	if (has[id] == null) {
+  		queue.push(watcher); // 将watcher存到队列中
+  		has[id] = true;
+  
+  		// 等待所有代码执行完后执行
+  		if (!pending) {
+  			// 如果还么清空队列，就不要再开定时器了
+  			setTimeout(() => {
+  				nextTick(flushSchedulerQueue);
+  				queue.forEach(watcher => watcher.run());
+  				queue = [];
+  				has = {};
+                  pending = false;
+  			});
+  			pending = true;
+  		}
+  	}
+  }
+  ```
+
+  
+
+- vm.nextTick
+
+  其实 Vue.nextTick 主要做的就是将其回调函数放进浏览器异步任务队列里面，在放进异步队列的过程会通过降级的方式处理兼容问题，优先使用 Promise，其次是 MutationObserver，然后是 setImmediate，最后才是使用 setTimeout.
+
+  ```js
+  const callbacks = [] // 用于存放回调函数数组
+  let pending = false
+  
+  // 作为 微任务 或者 宏任务 的回调函数
+  // 例如：setTimeout(flushCallbacks, 0)
+  function flushCallbacks () {
+    pending = false
+    // 从 callbacks 中取出所有回调回调函数，slice(0)相当于复制一份
+    const copies = callbacks.slice(0)
+    // 将 callbacks 数组置空
+    callbacks.length = 0
+    // 遍历执行每一个回调函数 flushSchedulerQueue
+    for (let i = 0; i < copies.length; i++) {
+      copies[i]()
+    }
+  }
+  
+  // timerFunc 的逻辑特别简单：
+  //  主要就是将 flushCallbacks 放进浏览器的异步任务队列里面。
+  //  中间通过降级的方式处理兼容问题，优先使用 Promise，其次是 MutationObserver，然后是 setImmediate，最后才是使用 setTimeout
+  //  也就是优先微任务处理，微任务不行逐步降级到宏任务处理
+  let timerFunc
+  
+  if (typeof Promise !== 'undefined' && isNative(Promise)) {
+    // 如果支持 Promise 则优先使用 Promise
+    const p = Promise.resolve()
+    timerFunc = () => {
+      p.then(flushCallbacks)
+    }
+    isUsingMicroTask = true
+  } else if (!isIE && typeof MutationObserver !== 'undefined' && (
+    isNative(MutationObserver) ||
+    // PhantomJS and iOS 7.x
+    MutationObserver.toString() === '[object MutationObserverConstructor]'
+  )) {
+    // 使用 MutationObserver
+    let counter = 1
+    const observer = new MutationObserver(flushCallbacks)
+    const textNode = document.createTextNode(String(counter))
+    observer.observe(textNode, {
+      characterData: true
+    })
+    timerFunc = () => {
+      counter = (counter + 1) % 2
+      textNode.data = String(counter)
+    }
+    isUsingMicroTask = true
+  } else if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+    // 使用 setImmediate，其实 setImmediate 已经算是宏任务了，但是性能会比 setTimeout 稍微好点
+    timerFunc = () => {
+      setImmediate(flushCallbacks)
+    }
+  } else {
+    // setTimeout 是最后的选择
+    // Fallback to setTimeout.
+    timerFunc = () => {
+      setTimeout(flushCallbacks, 0)
+    }
+  }
+  
+  // cb：回调函数 flushSchedulerQueue
+  // ctx：上下文
+  export function nextTick (cb?: Function, ctx?: Object) {
+    let _resolve
+    // 将回调函数 cb（flushSchedulerQueue）放进 callbacks 数组中
+    // 如果是直接通过 Vue.nextTick 或者 vm.$nextTick 调用，cb 就是调用时传的 callback
+    //   this.$nextTick(() => {})
+    callbacks.push(() => {
+      if (cb) {
+        try {
+          cb.call(ctx)
+        } catch (e) {
+          handleError(e, ctx, 'nextTick')
+        }
+      } else if (_resolve) {
+        _resolve(ctx)
+      }
+    })
+    
+    // 如果 pending 为 false，代表浏览器任务队列为空（即没有 flushCallbacks）
+    // 如果 pending 为 true，代表浏览器任务队列存在任务
+    // 在执行 flushCallbacks 的时候会再次将 pending 标记为 false
+    // 也就是说，pending 在这里的作用就是：保证在同一时刻，浏览器的任务队列中只有一个 flushCallbacks 函数
+    if (!pending) {
+      pending = true
+  
+      // 执行 timerFunc 函数
+      // timerFunc 函数的主要作用就是：通过微任务或者宏任务的方式往浏览器添加任务队列
+      timerFunc()
+    }
+    // $flow-disable-line
+    if (!cb && typeof Promise !== 'undefined') {
+      return new Promise(resolve => {
+        _resolve = resolve
+      })
+    }
+  }
+  ```
+
+## 十一、watch的实现原理
+
+​	

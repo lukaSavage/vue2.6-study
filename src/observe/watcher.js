@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-28 14:53:48
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-10 22:34:59
+ * @LastEditTime: 2022-02-12 12:16:45
  * @FilePath: \vue-demo\src\observe\watcher.js
  */
 import { nextTick } from '../utils';
@@ -58,7 +58,10 @@ let has = {}; // 源码中也是用对象来去重，我们也用之
 let pending = false; //相当于做一次防抖节流
 
 function flushSchedulerQueue() {
-	queue.forEach(watcher => watcher.run());
+	queue.forEach(watcher => {
+		watcher.run();
+		watcher.cb();
+	});
 	queue = []; // 清空队列是为了下次使用
 	has = {};
 	pending = false;
@@ -67,15 +70,20 @@ function flushSchedulerQueue() {
 function queueWatcher(watcher) {
 	const id = watcher.id;
 	if (has[id] == null) {
-		queue.push(watcher);
-		console.log(queue[0].run);
+		queue.push(watcher); // 将watcher存到队列中
 		has[id] = true;
 
 		// 等待所有代码执行完后执行
 		if (!pending) {
-			setTimeout(() => {
-				nextTick(flushSchedulerQueue);
-			});
+			// 如果还么清空队列，就不要再开定时器了
+			// setTimeout(() => {
+			// 	nextTick(flushSchedulerQueue);
+			// 	queue.forEach(watcher => watcher.run());
+			// 	queue = [];
+			// 	has = {};
+			//     pending = false;
+			// });
+			nextTick(flushSchedulerQueue);
 			pending = true;
 		}
 	}

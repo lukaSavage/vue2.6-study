@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 10:51:12
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-10 23:13:23
+ * @LastEditTime: 2022-02-12 12:15:17
  */
 
 /**
@@ -92,7 +92,7 @@ export function mergeOptions(parent, child) {
 	return options;
 }
 
-let callbacks = [];
+let callbacks = []; // note: 用于存放回调的数组，其作用是将回调延迟到DOM更新之后执行
 let pending = false;
 
 function flushCallbacks() {
@@ -102,7 +102,9 @@ function flushCallbacks() {
 
 let timeFunc;
 if (Promise) {
-	timeFunc = Promise.resolve().then(flushCallbacks);
+	timeFunc = () => {
+		Promise.resolve().then(flushCallbacks); // 异步处理更新
+	};
 } else if (MutationObserver) {
 	// MutationObserver可以监控dom变化，是异步更新
 	let observe = new MutationObserver(flushCallbacks);
@@ -112,7 +114,9 @@ if (Promise) {
 		textNode.textContent = 2;
 	};
 } else if (setImmediate) {
-	timeFunc = setImmediate(flushCallbacks);
+	timeFunc = () => {
+		setImmediate(flushCallbacks);
+	};
 } else {
 	timeFunc = () => {
 		setTimeout(flushCallbacks);
@@ -120,6 +124,7 @@ if (Promise) {
 }
 
 export function nextTick(cb) {
+	console.log(cb);
 	// 因为内部会调用nextTick,用户也会调用，但是异步只需要一次
 	callbacks.push(cb);
 	if (!pending) {
