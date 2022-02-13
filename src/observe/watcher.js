@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-28 14:53:48
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-12 12:16:45
+ * @LastEditTime: 2022-02-13 13:37:16
  * @FilePath: \vue-demo\src\observe\watcher.js
  */
 import { nextTick } from '../utils';
@@ -70,7 +70,7 @@ function flushSchedulerQueue() {
 function queueWatcher(watcher) {
 	const id = watcher.id;
 	if (has[id] == null) {
-		queue.push(watcher); // 将watcher存到队列中
+		queue.push(watcher);
 		has[id] = true;
 
 		// 等待所有代码执行完后执行
