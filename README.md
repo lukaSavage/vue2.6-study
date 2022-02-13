@@ -446,7 +446,6 @@
          let dep = new Dep(); // 每个属性都有一个dep
          Object.defineProperty(data, key, {
              get() {
-                 console.log('用户获取值了！', value);
                  if (Dep.target) {
                      // 让这个属性记住
                      dep.depend();
@@ -454,7 +453,6 @@
                  return value;
              },
              set(newVal) {
-                 console.log('用户改值了~', newVal);
                  // 在赋值的时候可能会给响应式数据赋值一个新对象，这个时候也要递归添加get、set方法
                  observe(newVal);
                  if (value === newVal) return;
@@ -618,5 +616,7 @@
   ```
 
 ## 十一、watch的实现原理
+
+## 十二、虚拟DOM-DIFF
 
 ​	

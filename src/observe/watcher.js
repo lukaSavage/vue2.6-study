@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-28 14:53:48
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-13 13:37:16
+ * @LastEditTime: 2022-02-13 13:44:44
  * @FilePath: \vue-demo\src\observe\watcher.js
  */
 import { nextTick } from '../utils';
@@ -15,7 +15,9 @@ class Watcher {
 		this.vm = vm;
 		this.exprOrFn = exprOrFn;
 		this.cb = cb;
-		this.options = options;
+		this.options = options; 
+        this.isWatcher = !!options;  // 代表渲染watcher
+         
 		this.id = id++; // watcher的唯一标识
 		this.deps = []; // 盛放dep的容器
 		this.depsId = new Set();

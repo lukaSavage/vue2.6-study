@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 23:03:22
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-10 20:35:27
+ * @LastEditTime: 2022-02-13 14:11:50
  */
 
 import { myDefineProperty } from '../utils';
@@ -12,7 +12,6 @@ import Dep from './dep';
 
 class Observe {
     constructor(data) {
-        console.log(data);
         // 在data上添加一个属性__ob__,用于挂载observeArray方法给arrays.js文件使用
         /* done: 为什么要使用Object.defineProperty而不是直接 data.__ob__ = this */
         /* done: 答：如果直接赋值的话，因为__ob__会在循环中遍历出来，会造成死循环 */
@@ -56,7 +55,6 @@ function defineReactive(data, key, value) {
     let dep = new Dep(); // 每个属性都有一个dep
     Object.defineProperty(data, key, {
         get() {
-            console.log('用户获取值了！', value);
             if (Dep.target) {
                 // 让这个属性记住
                 dep.depend();
@@ -68,7 +66,6 @@ function defineReactive(data, key, value) {
             return value;
         },
         set(newVal) {
-            console.log('用户改值了~', newVal);
             // 在赋值的时候可能会给响应式数据赋值一个新对象，这个时候也要递归添加get、set方法
             observe(newVal);
             if (value === newVal) return;

@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:04:45
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-10 22:41:00
+ * @LastEditTime: 2022-02-13 14:11:31
  */
 
 import { initGlobalAPI } from './global';
@@ -13,7 +13,6 @@ import { renderMixin } from './vdom';
 import { stateMixin } from './state'
 
 function Vue(options) {
-	// console.log(options, this);
 	this._init(options);
 }
 

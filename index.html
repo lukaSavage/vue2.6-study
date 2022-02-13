@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 21:18:38
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-12 11:40:59
+ * @LastEditTime: 2022-02-13 13:48:18
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -49,14 +49,19 @@
             created() {
                 // console.log('vm中的created');
             },
+            watch: {
+                str(newVal, oldVal) {
+                    console.log(oldVal);
+                }
+            }
         })
         vm.$mount('#app')
         // vm._data.a = 1
-        setTimeout(() => {
-            vm.hehe = 1
-            vm.str = 'fuck you!!!'
-            vm.$nextTick(() => { })
-        }, 1000);
+        // setTimeout(() => {
+        //     vm.hehe = 1
+        //     vm.str = 'fuck you!!!'
+        //     vm.$nextTick(() => { })
+        // }, 1000);
 
 
         // setTimeout(() => {

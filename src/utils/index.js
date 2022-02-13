@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-23 10:51:12
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-12 12:15:17
+ * @LastEditTime: 2022-02-13 14:29:03
  */
 
 /**
@@ -46,8 +46,8 @@ const strats = {};
 strats.data = function (parentVal, childVal) {
 	return childVal;
 };
-strats.computed = function () {};
-strats.watch = function () {};
+// strats.computed = function () {};
+// strats.watch = function () {};
 function mergeHook(parentVal, childVal) {
 	// 生命周期的合并
 	if (childVal) {
@@ -67,7 +67,7 @@ LIFECYCLE_HOOKS.forEach(item => {
 // 混入函数
 export function mergeOptions(parent, child) {
 	// 遍历父亲，可能是父亲有 儿子没有
-	// console.log(parent, child.created());
+    console.log(parent, child);
 	const options = {};
 	// 儿子有，父亲没有
 	for (const key in parent) {
@@ -81,6 +81,7 @@ export function mergeOptions(parent, child) {
 	}
 
 	function mergeField(key) {
+        console.log(key);
 		// 合并字段
 		if (strats[key]) {
 			options[key] = strats[key](parent[key], child[key]);
@@ -124,7 +125,6 @@ if (Promise) {
 }
 
 export function nextTick(cb) {
-	console.log(cb);
 	// 因为内部会调用nextTick,用户也会调用，但是异步只需要一次
 	callbacks.push(cb);
 	if (!pending) {

@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-25 09:31:25
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-02 15:21:09
+ * @LastEditTime: 2022-02-13 14:12:09
  * @FilePath: \vue-demo\src\vdom\index.js
  */
 
@@ -28,7 +28,6 @@ export function renderMixin(Vue) {
 		const vm = this;
 		const render = vm.$options.render;
 		const vnode = render.call(this);
-        console.log(vnode);
 		return vnode;
 	};
 }

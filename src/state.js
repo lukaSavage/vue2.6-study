@@ -3,7 +3,7 @@
  * @Author: lukasavage
  * @Date: 2022-01-19 22:33:20
  * @LastEditors: lukasavage
- * @LastEditTime: 2022-02-10 22:45:35
+ * @LastEditTime: 2022-02-13 14:25:33
  */
 
 import { observe } from './observe';
@@ -11,6 +11,7 @@ import { myProxy, nextTick } from './utils';
 
 export function initState(vm) {
 	const opts = vm.$options;
+    console.log(opts);
 	// 针对不同的情况做不同的初始化
 	if (opts.props) {
 		initProps(vm);
@@ -43,12 +44,12 @@ function initData(vm) {
 	observe(data);
 }
 function initComputed() {}
-function initWatch() {}
-
-export function stateMixin(Vue) {
-    Vue.prototype.$nextTick = function(cb) {
-        nextTick(cb)
-    }
+function initWatch(vm) {
+	let watch = vm.$options.watch;
 }
 
-
+export function stateMixin(Vue) {
+	Vue.prototype.$nextTick = function (cb) {
+		nextTick(cb);
+	};
+}
